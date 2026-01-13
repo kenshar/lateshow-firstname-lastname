@@ -92,10 +92,26 @@ def get_episode_by_id(id):
     return jsonify(episode.to_dict_with_appearances())
 
 
+@app.route('/episodes/<int:id>', methods=['DELETE'])
+def delete_episode(id):
+    episode = Episode.query.get_or_404(id)
+    db.session.delete(episode)
+    db.session.commit()
+    return jsonify({'message': 'Episode deleted successfully'})
+
+
 @app.route('/guests', methods=['GET'])
 def get_guests():
     guests = Guest.query.all()
     return jsonify([guest.to_dict() for guest in guests])
+
+
+@app.route('/episodes/<int:id>', methods=['DELETE'])
+def delete_episode(id):
+    episode = Episode.query.get_or_404(id)
+    db.session.delete(episode)
+    db.session.commit()
+    return jsonify({'message': 'Episode deleted successfully'})
 
 
 @app.route('/appearances', methods=['POST'])
