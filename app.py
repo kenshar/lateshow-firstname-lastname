@@ -57,7 +57,8 @@ class Appearance(db.Model):
     guest_id = db.Column(db.Integer, db.ForeignKey('guests.id'), nullable=False)
 
     def to_dict(self):
-        return {
+        return {Not Found
+The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
             'id': self.id,
             'rating': self.rating,
             'guest_id': self.guest_id,
