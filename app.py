@@ -74,6 +74,7 @@ def index():
         'endpoints': {
             'GET /episodes': 'List all episodes',
             'GET /episodes/<id>': 'Get episode with appearances',
+            'DELETE /episodes/<id>': 'Delete an episode',
             'GET /guests': 'List all guests',
             'POST /appearances': 'Create new appearance (requires rating, episode_id, guest_id)'
         }
@@ -86,32 +87,22 @@ def get_episodes():
     return jsonify([episode.to_dict() for episode in episodes])
 
 
-@app.route('/episodes/<int:id>', methods=['GET'])
-def get_episode_by_id(id):
-    episode = Episode.query.get_or_404(id)
-    return jsonify(episode.to_dict_with_appearances())
-
-
-@app.route('/episodes/<int:id>', methods=['DELETE'])
-def delete_episode(id):
-    episode = Episode.query.get_or_404(id)
-    db.session.delete(episode)
-    db.session.commit()
-    return jsonify({'message': 'Episode deleted successfully'})
+@app.route('/episodes/<int:id>', methods=['GET', 'DELETE'])
+def get_or_delete_episode(id):
+    if request.method == 'GET':
+        episode = Episode.query.get_or_404(id)
+        return jsonify(episode.to_dict_with_appearances())
+    elif request.method == 'DELETE':
+        episode = Episode.query.get_or_404(id)
+        db.session.delete(episode)
+        db.session.commit()
+        return jsonify({'message': 'Episode deleted successfully'})
 
 
 @app.route('/guests', methods=['GET'])
 def get_guests():
     guests = Guest.query.all()
     return jsonify([guest.to_dict() for guest in guests])
-
-
-@app.route('/episodes/<int:id>', methods=['DELETE'])
-def delete_episode(id):
-    episode = Episode.query.get_or_404(id)
-    db.session.delete(episode)
-    db.session.commit()
-    return jsonify({'message': 'Episode deleted successfully'})
 
 
 @app.route('/appearances', methods=['POST'])
