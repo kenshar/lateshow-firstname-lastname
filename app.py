@@ -67,6 +67,19 @@ class Appearance(db.Model):
         }
 
 
+@app.route('/', methods=['GET'])
+def index():
+    return jsonify({
+        'message': 'Late Show API is running!',
+        'endpoints': {
+            'GET /episodes': 'List all episodes',
+            'GET /episodes/<id>': 'Get episode with appearances',
+            'GET /guests': 'List all guests',
+            'POST /appearances': 'Create new appearance (requires rating, episode_id, guest_id)'
+        }
+    })
+
+
 @app.route('/episodes', methods=['GET'])
 def get_episodes():
     episodes = Episode.query.all()
